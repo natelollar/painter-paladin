@@ -1,5 +1,5 @@
 """Substance Painter Script Sender
-===============================
+==================================================
 
 Sends a Python script file to Substance Painter for remote execution.
 """

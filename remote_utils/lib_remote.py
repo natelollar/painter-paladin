@@ -1,5 +1,5 @@
 """Substance Painter Remote Executor
-===============================
+==================================================
 
 A Python interface for remotely running scripts in Substance Painter via HTTP.
 """

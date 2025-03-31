@@ -2,7 +2,7 @@
 =========================================
 
 Restart plugin via Substance Painter if UI window is missing.
-UI window will reappear.  Toggle "Python < PainterToolset".
+UI window will reappear.  Toggle "Python < painter-paladin".
 """
 
 # import importlib

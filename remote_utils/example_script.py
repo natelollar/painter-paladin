@@ -1,5 +1,5 @@
 """Send to Substance example script.
-===============================
+==================================================
 
 Test sending raw code to Substance Painter via remote connection.
 """

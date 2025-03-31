@@ -5,7 +5,7 @@ test.py
 scratch/
 scratch.py
 .ruff_cache
-.vscode
+.vscode/
 *.code-workspace
 
 # Byte-compiled / optimized / DLL files
