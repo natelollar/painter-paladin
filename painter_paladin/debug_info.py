@@ -1,5 +1,5 @@
 """Debug Info
-===============================
+==================================================
 
 Get info helpful for debugging.
 """
@@ -12,7 +12,7 @@ from PySide6 import QtWidgets
 
 
 class DebugInfo:
-    """Debugging and testing functions for the Painter Toolset."""
+    """Debugging and testing functions for the plugin."""
 
     @staticmethod
     def environment_info() -> None:

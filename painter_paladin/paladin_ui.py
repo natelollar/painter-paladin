@@ -1,10 +1,10 @@
-"""Toolset UI Window
-===============================
+"""Painter Paladin UI Window
+==================================================
 
 This module contains the PySide UI window and button connections.
 """
 
-import importlib
+# import importlib
 
 from PySide6.QtCore import QSize, Qt, Signal
 from PySide6.QtWidgets import (
@@ -18,16 +18,16 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
-from . import debug_info, toolset_logic
+# from . import debug_info, paladin_logic
 from .debug_info import DebugInfo
-from .toolset_logic import ToolsetLogic
+from .paladin_logic import PaladinLogic
 
-importlib.reload(debug_info)
-importlib.reload(toolset_logic)
+# importlib.reload(debug_info)
+# importlib.reload(paladin_logic)
 
 
-class PainterToolsetUI(QWidget):
-    """Pyside UI window with tabs for Painter Toolset."""
+class PainterPaladinUI(QWidget):
+    """Pyside UI window with tabs for the plugin."""
 
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -74,7 +74,7 @@ class PainterToolsetUI(QWidget):
             title="Paintable Fill Layer (Passthrough)",
         )
         paintable_fill_layer_btn.clicked.connect(
-            lambda: ToolsetLogic().paintable_fill_layer(),
+            lambda: PaladinLogic().paintable_fill_layer(),
         )
         paintable_fill_layout.addWidget(paintable_fill_layer_btn)
         # Button. Create Group with Fill Layer and Paint Layer in Passthrough.
@@ -82,7 +82,7 @@ class PainterToolsetUI(QWidget):
             title="Paintable Fill Layer Group (Passthrough)",
         )
         paintable_fill_layer_btn.clicked.connect(
-            lambda: ToolsetLogic().paintable_fill_layer_group(),
+            lambda: PaladinLogic().paintable_fill_layer_group(),
         )
         paintable_fill_layout.addWidget(paintable_fill_layer_btn)
         # Add to tab layout.
@@ -94,13 +94,13 @@ class PainterToolsetUI(QWidget):
         # Button. Enable all channels for selected.
         apply_channels_btn = CustomButton(title="Enable All Channels (Fill Layer)")
         apply_channels_btn.clicked.connect(
-            lambda: ToolsetLogic().enable_channels_for_selected_fill(),
+            lambda: PaladinLogic().enable_channels_for_selected_fill(),
         )
         channels_toggle_layout.addWidget(apply_channels_btn)
         # Button. Enable Base Color only.
         disable_all_except_base_btn = CustomButton(title="Color Channel Only (Fill Layer)")
         disable_all_except_base_btn.clicked.connect(
-            lambda: ToolsetLogic().disable_all_except_base_color(),
+            lambda: PaladinLogic().disable_all_except_base_color(),
         )
         channels_toggle_layout.addWidget(disable_all_except_base_btn)
         # Add to tab layout.
@@ -127,7 +127,7 @@ class PainterToolsetUI(QWidget):
             set_skin_color_btn = CustomButton(value)
             rgb_0_1 = tuple(rgb_val / 255 for rgb_val in value)
             set_skin_color_btn.clicked.connect(
-                lambda v=rgb_0_1: ToolsetLogic().set_channel_value(v, "BaseColor"),
+                lambda v=rgb_0_1: PaladinLogic().set_channel_value(v, "BaseColor"),
             )
             set_skin_color_layout.addWidget(set_skin_color_btn, 1)
         # Add to tab layout.
@@ -147,7 +147,7 @@ class PainterToolsetUI(QWidget):
             rgb_val = int(value * 255)
             set_mono_color_btn = CustomButton(rgb_val)
             set_mono_color_btn.clicked.connect(
-                lambda v=value: ToolsetLogic().set_channel_value(v, "BaseColor"),
+                lambda v=value: PaladinLogic().set_channel_value(v, "BaseColor"),
             )
             set_mono_color_layout.addWidget(set_mono_color_btn)
         # Add to tab layout.
@@ -166,7 +166,7 @@ class PainterToolsetUI(QWidget):
         for value in roughness_values:
             set_roughness_btn = CustomButton(title=f"{value}")
             set_roughness_btn.clicked.connect(
-                lambda v=value: ToolsetLogic().set_channel_value(v, "Roughness"),
+                lambda v=value: PaladinLogic().set_channel_value(v, "Roughness"),
             )
             set_roughness_layout.addWidget(set_roughness_btn)
         # Add to tab layout.
@@ -182,7 +182,7 @@ class PainterToolsetUI(QWidget):
         for value in metallic_values:
             set_metallic_btn = CustomButton(title=f"{value}")
             set_metallic_btn.clicked.connect(
-                lambda v=value: ToolsetLogic().set_channel_value(v, "Metallic"),
+                lambda v=value: PaladinLogic().set_channel_value(v, "Metallic"),
             )
             set_metallic_layout.addWidget(set_metallic_btn)
         tab1_layout.addLayout(set_metallic_layout)
@@ -197,7 +197,7 @@ class PainterToolsetUI(QWidget):
         for value in opacity_values:
             set_opacity_btn = CustomButton(title=f"{value}")
             set_opacity_btn.clicked.connect(
-                lambda v=value: ToolsetLogic().set_opacity(opacity_val=v),
+                lambda v=value: PaladinLogic().set_opacity(opacity_val=v),
             )
             set_opacity_layout.addWidget(set_opacity_btn)
         tab1_layout.addLayout(set_opacity_layout)
@@ -208,13 +208,13 @@ class PainterToolsetUI(QWidget):
         # Button.
         black_mask_btn = CustomButton(title="Set Black Mask")
         black_mask_btn.clicked.connect(
-            lambda: ToolsetLogic().setup_mask(background="Black"),
+            lambda: PaladinLogic().setup_mask(background="Black"),
         )
         set_mask_layout.addWidget(black_mask_btn)
         # Button.
         white_mask_btn = CustomButton(title="Set White Mask")
         white_mask_btn.clicked.connect(
-            lambda: ToolsetLogic().setup_mask(background="White"),
+            lambda: PaladinLogic().setup_mask(background="White"),
         )
         set_mask_layout.addWidget(white_mask_btn)
         tab1_layout.addLayout(set_mask_layout)
@@ -225,13 +225,13 @@ class PainterToolsetUI(QWidget):
         # Button. Remove Mask
         remove_layer_mask_btn = CustomButton(title="Remove Mask")
         remove_layer_mask_btn.clicked.connect(
-            lambda: ToolsetLogic().remove_layer_mask(),
+            lambda: PaladinLogic().remove_layer_mask(),
         )
         mask_01_layout.addWidget(remove_layer_mask_btn)
         # Button. Add fill effect to mask for transparency control.
         add_mask_fill = CustomButton(title="Add Mask Fill")
         add_mask_fill.clicked.connect(
-            lambda: ToolsetLogic().add_mask_fill(),
+            lambda: PaladinLogic().add_mask_fill(),
         )
         mask_01_layout.addWidget(add_mask_fill)
         tab1_layout.addLayout(mask_01_layout)
@@ -242,13 +242,13 @@ class PainterToolsetUI(QWidget):
         # Button. Set blending mode to passthrough.
         set_passthrough_mode_btn = CustomButton(title="Set Passthrough Mode")
         set_passthrough_mode_btn.clicked.connect(
-            lambda: ToolsetLogic().set_passthrough_mode(),
+            lambda: PaladinLogic().set_passthrough_mode(),
         )
         passthrough_btns_layout.addWidget(set_passthrough_mode_btn)
         # Button. Passthrough paint layer.
         add_passthrough_paint_layer_btn = CustomButton(title="Add Passthrough Layer")
         add_passthrough_paint_layer_btn.clicked.connect(
-            lambda: ToolsetLogic().add_passthrough_paint_layer(),
+            lambda: PaladinLogic().add_passthrough_paint_layer(),
         )
         passthrough_btns_layout.addWidget(add_passthrough_paint_layer_btn)
         tab1_layout.addLayout(passthrough_btns_layout)
@@ -289,32 +289,32 @@ class PainterToolsetUI(QWidget):
         # Buttons. Python module help().
         module_help_layout = QHBoxLayout()
 
-        ui_module_help_btn = CustomButton(title="ui help()")
+        ui_module_help_btn = CustomButton(title="ui")
         ui_module_help_btn.clicked.connect(lambda: DebugInfo.module_help("ui"))
         module_help_layout.addWidget(ui_module_help_btn)
 
-        layerstack_module_help_btn = CustomButton(title="layerstack help()")
+        layerstack_module_help_btn = CustomButton(title="layerstack")
         layerstack_module_help_btn.clicked.connect(
             lambda: DebugInfo().module_help("layerstack"),
         )
         module_help_layout.addWidget(layerstack_module_help_btn)
 
-        textureset_module_help_btn = CustomButton(title="textureset help()")
+        textureset_module_help_btn = CustomButton(title="textureset")
         textureset_module_help_btn.clicked.connect(
             lambda: DebugInfo().module_help("textureset"),
         )
         module_help_layout.addWidget(textureset_module_help_btn)
 
-        colormanagement_module_help_btn = CustomButton(title="colormanagement help()")
+        colormanagement_module_help_btn = CustomButton(title="colormanagement")
         colormanagement_module_help_btn.clicked.connect(
             lambda: DebugInfo().module_help("colormanagement"),
         )
         module_help_layout.addWidget(colormanagement_module_help_btn)
-        logging_module_help_btn = CustomButton(title="logging help()")
+        logging_module_help_btn = CustomButton(title="logging")
         logging_module_help_btn.clicked.connect(lambda: DebugInfo.module_help("logging"))
         module_help_layout.addWidget(logging_module_help_btn)
 
-        resource_module_help_btn = CustomButton(title="resource help()")
+        resource_module_help_btn = CustomButton(title="resource")
         resource_module_help_btn.clicked.connect(
             lambda: DebugInfo().module_help("resource"),
         )
@@ -340,13 +340,13 @@ class PainterToolsetUI(QWidget):
         # Button.
         add_noise_mask_btn = CustomButton(title="Noise Mask")
         add_noise_mask_btn.clicked.connect(
-            lambda: ToolsetLogic().add_noise_mask(),
+            lambda: PaladinLogic().add_noise_mask(),
         )
         mask_effect_01_layout.addWidget(add_noise_mask_btn)
         # Button.
         add_curvature_mask_btn = CustomButton(title="Curvature Mask")
         add_curvature_mask_btn.clicked.connect(
-            lambda: ToolsetLogic().add_generator_mask("Curvature"),
+            lambda: PaladinLogic().add_generator_mask("Curvature"),
         )
         mask_effect_01_layout.addWidget(add_curvature_mask_btn)
         tab3_layout.addLayout(mask_effect_01_layout)
@@ -358,13 +358,13 @@ class PainterToolsetUI(QWidget):
         # Button.
         add_position_mask_btn = CustomButton(title="Position Mask")
         add_position_mask_btn.clicked.connect(
-            lambda: ToolsetLogic().add_generator_mask("Position"),
+            lambda: PaladinLogic().add_generator_mask("Position"),
         )
         mask_effect_02_layout.addWidget(add_position_mask_btn)
         # Button.
         add_light_mask_btn = CustomButton(title="Light Mask")
         add_light_mask_btn.clicked.connect(
-            lambda: ToolsetLogic().add_generator_mask("Light"),
+            lambda: PaladinLogic().add_generator_mask("Light"),
         )
         mask_effect_02_layout.addWidget(add_light_mask_btn)
         tab3_layout.addLayout(mask_effect_02_layout)
@@ -391,7 +391,7 @@ class PainterToolsetUI(QWidget):
             set_metal_color_btn = CustomButton(value)
             rgb_0_1 = tuple(rgb_val / 255 for rgb_val in value)
             set_metal_color_btn.clicked.connect(
-                lambda v=rgb_0_1: ToolsetLogic().set_channel_value(v, "BaseColor"),
+                lambda v=rgb_0_1: PaladinLogic().set_channel_value(v, "BaseColor"),
             )
             set_metal_color_layout.addWidget(set_metal_color_btn)
         # Add to tab layout.
@@ -415,7 +415,7 @@ class PainterToolsetUI(QWidget):
             set_basic_color_btn = CustomButton(value)
             rgb_0_1 = tuple(rgb_val / 255 for rgb_val in value)
             set_basic_color_btn.clicked.connect(
-                lambda v=rgb_0_1: ToolsetLogic().set_channel_value(v, "BaseColor"),
+                lambda v=rgb_0_1: PaladinLogic().set_channel_value(v, "BaseColor"),
             )
             set_basic_color_layout.addWidget(set_basic_color_btn)
         tab3_layout.addLayout(set_basic_color_layout)
@@ -531,7 +531,12 @@ class CustomButton(QFrame):
         # Not required for hover effect.
         self.setMouseTracking(True)
 
-    def mousePressEvent(self, event):
-        """Handles mouse press event on this widget."""
+    def mousePressEvent(self, event) -> None:
+        """Handles mouse press event on this widget.
+
+        Args:
+            event (QtGui.QMouseEvent): Mouse event from PySide containing click information.
+
+        """
         self.clicked.emit()
         super().mousePressEvent(event)

@@ -1,9 +1,24 @@
+"""Substance Painter Script Sender
+===============================
+
+Sends a Python script file to Substance Painter for remote execution.
+"""
+
 import sys
 
 import lib_remote
 
 
-def send_script_to_painter():
+def send_script_to_painter() -> None:
+    """Sends a Python script file to Substance Painter for remote execution.
+
+    Connects to Substance Painter, reads a script file from a command-line argument,
+    and executes it remotely. Prints status messages and exits on failure.
+
+    Args:
+        None (uses sys.argv[1] for script file path)
+
+    """
     # Create connection to Substance Painter
     Remote = lib_remote.RemotePainter()
 
@@ -20,7 +35,7 @@ def send_script_to_painter():
         print("Error: No script file provided. Please pass a script file path.")
         sys.exit(1)
 
-    script_path = sys.argv[1]  # Use the file path passed by Sublime
+    script_path = sys.argv[1]  # Assign script file path from command-line argument
     try:
         with open(script_path) as file:
             script_content = file.read()

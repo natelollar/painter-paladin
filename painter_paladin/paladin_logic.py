@@ -1,7 +1,7 @@
-"""Painter Toolset Logic
-===============================
+"""Painter Paladin Logic
+==================================================
 
-This module contains logic for toolset buttons and actions in Substance Painter.
+This module contains logic for the plugin buttons and actions in Substance Painter.
 """
 
 #import traceback  # noqa: F401
@@ -9,7 +9,7 @@ This module contains logic for toolset buttons and actions in Substance Painter.
 import substance_painter as sp
 
 
-class ToolsetLogic:
+class PaladinLogic:
     """Logic for the plugin."""
 
     def paintable_fill_layer(self) -> None:
@@ -203,19 +203,34 @@ class ToolsetLogic:
         try:
             stack = sp.textureset.get_active_stack()
             selected_nodes = sp.layerstack.get_selected_nodes(stack)
+            available_channels = set(stack.all_channels())
 
             if not selected_nodes:
                 sp.logging.warning("No layer or effect selected.")
                 return
 
             for node in selected_nodes:
-                available_channels = set(stack.all_channels())
                 sp.logging.info(f"Enabling channels for: {node.get_name()}")
 
+                # get channel color values to reapply later
+                channel_val_dict = {}
+                for channel in available_channels:
+                    source = node.get_source(channel)
+                    if hasattr(source, "get_color"):  # avoid bitmap texture error
+                        channel_val = source.get_color()
+                        channel_val_dict[channel] = channel_val
+
+                # activate all channels
                 node.active_channels = available_channels
+
+                # reapply channel color values
+                for channel, channel_val in channel_val_dict.items():
+                    node.set_source(channel, channel_val)
+
                 sp.logging.info(f"Applied Channels: {[ch.name for ch in node.active_channels]}")
 
         except Exception as e:
+            # sp.logging.warning(f"Error: {e}\nTraceback: {traceback.format_exc()}")
             sp.logging.warning(f"Error enabling channels: {e}")
 
     def disable_all_except_base_color(self) -> None:
@@ -223,16 +238,27 @@ class ToolsetLogic:
         try:
             stack = sp.textureset.get_active_stack()
             selected_nodes = sp.layerstack.get_selected_nodes(stack)
+            base_color_channel = sp.textureset.ChannelType.BaseColor
 
             if not selected_nodes:
                 sp.logging.warning("No layer or effect selected.")
                 return
 
             for node in selected_nodes:
-                base_color_channel = {sp.textureset.ChannelType.BaseColor}
                 sp.logging.info(f"Disabling all but Base Color for: {node.get_name()}")
+                source = node.get_source(base_color_channel)
 
-                node.active_channels = base_color_channel
+                # get base color value if available
+                if hasattr(source, "get_color"):
+                    channel_val = source.get_color()
+
+                # activate only base color channel
+                node.active_channels = {base_color_channel}
+
+                if hasattr(source, "get_color"):
+                    # reapply channel values
+                    node.set_source(base_color_channel, channel_val)
+
                 sp.logging.info(f"Applied Channels: {[ch.name for ch in node.active_channels]}")
 
         except Exception as e:
